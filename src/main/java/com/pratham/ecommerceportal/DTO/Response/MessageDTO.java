@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorDTO implements ResponseDTO {
+public class MessageDTO implements ResponseDTO {
     private String message;
 }

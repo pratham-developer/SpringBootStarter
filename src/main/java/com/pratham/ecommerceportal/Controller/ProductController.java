@@ -1,8 +1,9 @@
 package com.pratham.ecommerceportal.Controller;
 
 import com.pratham.ecommerceportal.DTO.Request.AddProductDTO;
+import com.pratham.ecommerceportal.DTO.Request.PatchDTO;
 import com.pratham.ecommerceportal.DTO.Request.PutProductDTO;
-import com.pratham.ecommerceportal.DTO.Response.ErrorDTO;
+import com.pratham.ecommerceportal.DTO.Response.MessageDTO;
 import com.pratham.ecommerceportal.DTO.ResponseDTO;
 import com.pratham.ecommerceportal.Exception.ProductNotFoundException;
 import com.pratham.ecommerceportal.Service.ProductService;
@@ -25,7 +26,7 @@ public class ProductController {
         try{
             return ResponseEntity.ok(productService.getAllProducts());
         }catch (Exception e){
-            return ResponseEntity.internalServerError().body(new ErrorDTO(e.getMessage()));
+            return ResponseEntity.internalServerError().body(new MessageDTO(e.getMessage()));
         }
     }
 
@@ -34,9 +35,9 @@ public class ProductController {
         try{
             return ResponseEntity.ok(productService.getProductById(id));
         }catch (ProductNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDTO(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageDTO(e.getMessage()));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDTO(e.getMessage()));
         }
     }
 
@@ -45,7 +46,7 @@ public class ProductController {
         try{
             return ResponseEntity.ok(productService.addProduct(addProductDTO));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDTO(e.getMessage()));
         }
     }
 
@@ -54,9 +55,33 @@ public class ProductController {
         try{
             return ResponseEntity.ok(productService.putProduct(putProductDTO));
         }catch (ProductNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDTO(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageDTO(e.getMessage()));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDTO(e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseDTO> delete(@PathVariable UUID id){
+        try{
+            return ResponseEntity.ok(productService.deleteProduct(id));
+        }catch (ProductNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageDTO(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDTO(e.getMessage()));
+        }
+    }
+
+    @PatchMapping("/patch/{id}")
+    public ResponseEntity<ResponseDTO> patch(@PathVariable UUID id, @RequestBody PatchDTO patchDTO){
+        try{
+            return ResponseEntity.ok(productService.patchProduct(id,patchDTO));
+        }catch (ProductNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageDTO(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDTO(e.getMessage()));
         }
     }
 }
