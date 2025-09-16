@@ -1,7 +1,11 @@
 package com.pratham.ecommerceportal.Service;
 
+import com.pratham.ecommerceportal.DTO.Request.AddProductDTO;
+import com.pratham.ecommerceportal.DTO.Request.PutProductDTO;
+import com.pratham.ecommerceportal.DTO.Response.ErrorDTO;
 import com.pratham.ecommerceportal.DTO.Response.GetAllDTO;
 import com.pratham.ecommerceportal.DTO.Response.GetProductDTO;
+import com.pratham.ecommerceportal.DTO.ResponseDTO;
 import com.pratham.ecommerceportal.Entity.Product;
 import com.pratham.ecommerceportal.Exception.ProductNotFoundException;
 import com.pratham.ecommerceportal.Repository.ProductRepository;
@@ -32,6 +36,17 @@ public class ProductService {
     public GetProductDTO getProductById(UUID id){
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException());
         return modelMapper.map(product, GetProductDTO.class);
+    }
+
+    public GetProductDTO addProduct(AddProductDTO addProductDTO){
+        Product product = productRepository.save(modelMapper.map(addProductDTO,Product.class));
+        return modelMapper.map(product, GetProductDTO.class);
+    }
+
+    public GetProductDTO putProduct(PutProductDTO putProductDTO){
+        productRepository.findById(putProductDTO.getId()).orElseThrow(()->new ProductNotFoundException());
+        Product product = productRepository.save(modelMapper.map(putProductDTO,Product.class));
+        return modelMapper.map(product,GetProductDTO.class);
     }
 
 }

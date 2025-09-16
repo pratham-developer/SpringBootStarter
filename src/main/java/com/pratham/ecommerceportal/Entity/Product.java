@@ -36,7 +36,7 @@ public class Product {
     @PositiveOrZero(message = "Price must be greater than or equal to zero")
     private BigDecimal price;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     @PositiveOrZero(message = "Quantity must be greater than or equal to zero")
     private int quantity;
 
